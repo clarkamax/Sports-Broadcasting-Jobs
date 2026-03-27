@@ -80,7 +80,62 @@
     .toolbar input[name="date"] { width: 150px; }
     .toolbar input[name="duedate"] { width: 150px; }
     .toolbar input[name="location"] { width: 160px; }
-    .toolbar select[name="assignee"] { width: 160px; }
+    .assignee-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      min-height: 32px;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      padding: 4px 8px;
+      border-radius: 6px;
+      flex: 1;
+    }
+    .assignee-pill {
+      background: #b91c1c;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .assignee-pill .remove {
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .assignee-modal {
+      margin-top: 16px;
+    }
+    .assignee-checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .assignee-checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      cursor: pointer;
+    }
+    .assignee-checkbox-item input {
+      cursor: pointer;
+    }
+    .assignee-badge {
+      display: inline-block;
+      background: #b91c1c;
+      color: #fff;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      margin-right: 4px;
+      margin-bottom: 2px;
+    }
     .toolbar select[name="status"] { width: 130px; }
     .toolbar select[name="priority"] { width: 110px; }
 
@@ -362,7 +417,10 @@
   <input name="duedate" type="date" id="inp-duedate" title="Due Date" />
   <input name="job" type="text" placeholder="Job title..." id="inp-job" />
   <input name="location" type="text" placeholder="Location / Venue..." id="inp-location" />
-  <select name="assignee" id="inp-assignee"><option value="">— Assign to —</option></select>
+  <div id="assignee-pills-container" class="assignee-pills">
+    <span style="font-size:12px;color:#8b949e;">No one selected</span>
+  </div>
+  <button class="btn btn-secondary" onclick="openAssigneeModal()" style="margin: 0;">Manage Assignees</button>
   <select name="status" id="inp-status">
     <option value="todo">To Do</option>
     <option value="progress">In Progress</option>
@@ -458,9 +516,22 @@
   </div>
 </div>
 
+<!-- Assignee Modal -->
+<div class="modal-overlay" id="assignee-modal">
+  <div class="modal assignee-modal">
+    <h2>Select Assignees for Job</h2>
+    <div class="assignee-checkboxes" id="assignee-checkboxes"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeAssigneeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="confirmAssignees()">Confirm</button>
+    </div>
+  </div>
+</div>
+
 <script>
   let jobs = [];
   let staff = [];
+  let selectedAssignees = [];
   let sortCol = 'date';
   let sortDir = 1;
   let firebaseReady = false;
@@ -520,7 +591,7 @@
       date: document.getElementById('inp-date').value,
       dueDate: document.getElementById('inp-duedate').value,
       location: document.getElementById('inp-location').value.trim(),
-      assignee: document.getElementById('inp-assignee').value,
+      assignees: selectedAssignees.slice(),
       status: document.getElementById('inp-status').value,
       priority: document.getElementById('inp-priority').value,
       notes: ''
@@ -532,6 +603,8 @@
       } else {
         document.getElementById('inp-job').value = '';
         document.getElementById('inp-location').value = '';
+        selectedAssignees = [];
+        updateAssigneeDisplay();
       }
     });
   }
@@ -548,6 +621,63 @@
     });
   }
 
+  let editingJobId = null;
+
+  function openAssigneeModal() {
+    const container = document.getElementById('assignee-checkboxes');
+    container.innerHTML = staff.map(s => `
+      <label class="assignee-checkbox-item">
+        <input type="checkbox" value="${esc(s)}" ${selectedAssignees.includes(s) ? 'checked' : ''} />
+        ${esc(s)}
+      </label>
+    `).join('');
+    document.getElementById('assignee-modal').classList.add('open');
+  }
+
+  function closeAssigneeModal() {
+    document.getElementById('assignee-modal').classList.remove('open');
+  }
+
+  function confirmAssignees() {
+    const checked = document.querySelectorAll('#assignee-checkboxes input:checked');
+    const newAssignees = Array.from(checked).map(cb => cb.value);
+
+    if (editingJobId) {
+      updateJob(editingJobId, 'assignees', newAssignees);
+      editingJobId = null;
+    } else {
+      selectedAssignees = newAssignees;
+      updateAssigneeDisplay();
+    }
+    closeAssigneeModal();
+  }
+
+  function updateAssigneeDisplay() {
+    const container = document.getElementById('assignee-pills-container');
+    if (selectedAssignees.length === 0) {
+      container.innerHTML = '<span style="font-size:12px;color:#8b949e;">No one selected</span>';
+    } else {
+      container.innerHTML = selectedAssignees.map(name => `
+        <div class="assignee-pill">
+          ${esc(name)}
+          <span class="remove" onclick="removeAssignee('${esc(name)}')">×</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  function removeAssignee(name) {
+    selectedAssignees = selectedAssignees.filter(a => a !== name);
+    updateAssigneeDisplay();
+  }
+
+  function editJobAssignees(jobId) {
+    editingJobId = jobId;
+    const job = jobs.find(j => j.id === jobId);
+    selectedAssignees = (job.assignees || []).slice();
+    openAssigneeModal();
+  }
+
   function sortBy(col) {
     if (sortCol === col) sortDir *= -1;
     else { sortCol = col; sortDir = 1; }
@@ -560,9 +690,10 @@
     const fAssignee = document.getElementById('filter-assignee').value;
     const fPriority = document.getElementById('filter-priority').value;
     return jobs.filter(j => {
-      if (search && !j.job.toLowerCase().includes(search) && !j.location.toLowerCase().includes(search) && !j.assignee.toLowerCase().includes(search)) return false;
+      const assigneeStr = (j.assignees || []).join(' ').toLowerCase();
+      if (search && !j.job.toLowerCase().includes(search) && !j.location.toLowerCase().includes(search) && !assigneeStr.includes(search)) return false;
       if (fStatus && j.status !== fStatus) return false;
-      if (fAssignee && j.assignee !== fAssignee) return false;
+      if (fAssignee && !j.assignees?.includes(fAssignee)) return false;
       if (fPriority && j.priority !== fPriority) return false;
       return true;
     }).sort((a, b) => {
@@ -597,10 +728,13 @@
         <td class="${dueCellClass}"><input type="date" value="${esc(j.dueDate||'')}" onchange="updateJob('${j.id}','dueDate',this.value);renderTable()" style="${isOverdue?'color:#f85149;font-weight:600':isSoon?'color:#b91c1c;font-weight:600':''}" /></td>
         <td><input value="${esc(j.location||'')}" placeholder="—" onchange="updateJob('${j.id}','location',this.value)" /></td>
         <td>
-          <select class="inline-assignee" onchange="updateJob('${j.id}','assignee',this.value)">
-            <option value="">Unassigned</option>
-            ${staff.map(s => `<option value="${esc(s)}" ${j.assignee === s ? 'selected' : ''}>${esc(s)}</option>`).join('')}
-          </select>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;">
+            ${(j.assignees || []).length === 0
+              ? '<span style="color:#8b949e;">—</span>'
+              : (j.assignees || []).map(a => `<span class="assignee-badge">${esc(a)}</span>`).join('')
+            }
+            <button class="btn btn-secondary" style="padding:3px 8px;font-size:11px;" onclick="editJobAssignees('${j.id}')">Edit</button>
+          </div>
         </td>
         <td>
           <select onchange="updateJob('${j.id}','status',this.value);renderTable()">
@@ -626,7 +760,7 @@
     document.getElementById('stat-total').textContent = jobs.length;
     document.getElementById('stat-progress').textContent = jobs.filter(j => j.status === 'progress').length;
     document.getElementById('stat-done').textContent = jobs.filter(j => j.status === 'done').length;
-    document.getElementById('stat-unassigned').textContent = jobs.filter(j => !j.assignee).length;
+    document.getElementById('stat-unassigned').textContent = jobs.filter(j => !j.assignees || j.assignees.length === 0).length;
     document.getElementById('stat-overdue').textContent = jobs.filter(j => j.dueDate && new Date(j.dueDate + 'T00:00:00') < now && j.status !== 'done' && j.status !== 'cancelled').length;
   }
 
@@ -635,19 +769,15 @@
   }
 
   function populateStaffDropdowns() {
-    const selects = [document.getElementById('inp-assignee'), document.getElementById('filter-assignee')];
-    selects.forEach((sel, i) => {
-      const val = sel.value;
-      sel.innerHTML = i === 0
-        ? '<option value="">— Assign to —</option>'
-        : '<option value="">All Staff</option>';
-      staff.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s; opt.textContent = s;
-        sel.appendChild(opt);
-      });
-      sel.value = val;
+    const filterSel = document.getElementById('filter-assignee');
+    const val = filterSel.value;
+    filterSel.innerHTML = '<option value="">All Staff</option>';
+    staff.forEach(s => {
+      const opt = document.createElement('option');
+      opt.value = s; opt.textContent = s;
+      filterSel.appendChild(opt);
     });
+    filterSel.value = val;
   }
 
   function openStaffModal() {
