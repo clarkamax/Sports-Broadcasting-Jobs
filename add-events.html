@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bulk Add Events - Sports Broadcasting</title>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .container {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 24px;
+    }
+    h1 {
+      color: #fff;
+      margin-bottom: 20px;
+    }
+    .status {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 16px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .status.success {
+      border-color: #3fb950;
+      color: #3fb950;
+    }
+    .status.error {
+      border-color: #f85149;
+      color: #f85149;
+    }
+    .status.info {
+      border-color: #58a6ff;
+      color: #58a6ff;
+    }
+    button {
+      background: #b91c1c;
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #dc2626;
+    }
+    button:disabled {
+      background: #484f58;
+      cursor: not-allowed;
+    }
+    .progress {
+      margin-top: 16px;
+      font-size: 13px;
+      color: #8b949e;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>📡 Bulk Add Events</h1>
+  <div id="status" class="status info">Ready to add 50 events from April 2026...</div>
+  <button id="btn-add" onclick="startAdding()">Start Adding Events</button>
+  <div class="progress">
+    <div id="progress-text"></div>
+  </div>
+</div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAVptctnUojdVbnr_w_EKUQi4I0_EWCb1A",
+    authDomain: "sports-broadcasting-33b15.firebaseapp.com",
+    projectId: "sports-broadcasting-33b15",
+    databaseURL: "https://sports-broadcasting-33b15-default-rtdb.firebaseio.com",
+    storageBucket: "sports-broadcasting-33b15.firebasestorage.app",
+    messagingSenderId: "876970641794",
+    appId: "1:876970641794:web:27bab37eed4774ea32279b"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
+  const events = [
+    { job: "Boys Tennis - Norwalk vs Boone", date: "2026-04-02", dueDate: "2026-04-02", location: "Boone - McHose Park", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - Boone Invite", date: "2026-04-02", dueDate: "2026-04-02", location: "Goeppinger Field", priority: "medium", status: "todo" },
+    { job: "Boys Soccer - Ogden Early Bird Coed", date: "2026-04-02", dueDate: "2026-04-02", location: "Ogden High School", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - Grinnell vs Boone", date: "2026-04-06", dueDate: "2026-04-06", location: "Grinnell High School", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - Boone vs Grinnell", date: "2026-04-06", dueDate: "2026-04-06", location: "Grinnell High School", priority: "medium", status: "todo" },
+    { job: "Boys Golf - Bondurant-Farrar vs Boone", date: "2026-04-06", dueDate: "2026-04-06", location: "Cedar Pointe Golf Course", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - Dallas Center-Grimes vs Boone", date: "2026-04-07", dueDate: "2026-04-07", location: "Caldwell Park - Pella Tennis Courts", priority: "medium", status: "todo" },
+    { job: "Boys Soccer - Boone vs Pella", date: "2026-04-07", dueDate: "2026-04-07", location: "TBD", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - Boone vs Greene County", date: "2026-04-07", dueDate: "2026-04-07", location: "Greene County Middle School", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - Carlisle vs Boone", date: "2026-04-08", dueDate: "2026-04-08", location: "Goeppinger Field", priority: "medium", status: "todo" },
+    { job: "Boys Soccer - Boone/OBS Invite", date: "2026-04-08", dueDate: "2026-04-08", location: "Cedar Pointe Golf Course", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - Bill Miller Invite", date: "2026-04-09", dueDate: "2026-04-09", location: "Van Meter School", priority: "medium", status: "todo" },
+    { job: "Boys Soccer - Bill Miller Invite", date: "2026-04-09", dueDate: "2026-04-09", location: "Van Meter School", priority: "medium", status: "todo" },
+    { job: "Boys Soccer - Carlisle vs Boone", date: "2026-04-09", dueDate: "2026-04-09", location: "TBD", priority: "medium", status: "todo" },
+    { job: "Boys Track - 2026 Jim Duncan Invitational", date: "2026-04-10", dueDate: "2026-04-10", location: "Drake Stadium", priority: "medium", status: "todo" },
+    { job: "Boys Soccer - Boone Invite", date: "2026-04-10", dueDate: "2026-04-10", location: "Boone - McHose Park", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - 2026 Jim Duncan Invitational", date: "2026-04-11", dueDate: "2026-04-11", location: "Drake Stadium", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - Boone vs Ames", date: "2026-04-13", dueDate: "2026-04-13", location: "Ames High Baseball & Softball", priority: "medium", status: "todo" },
+    { job: "Boys Golf - Varsity Boys Golf", date: "2026-04-13", dueDate: "2026-04-13", location: "TBD", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - Dallas Center-Grimes vs Boone", date: "2026-04-14", dueDate: "2026-04-14", location: "Boone - McHose Park", priority: "medium", status: "todo" },
+    { job: "Boys Soccer - Ballard vs Boone", date: "2026-04-14", dueDate: "2026-04-14", location: "Boone - McHose Park", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - Boone vs Ballard", date: "2026-04-14", dueDate: "2026-04-14", location: "Ballard Middle School", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - Boone vs Ballard", date: "2026-04-15", dueDate: "2026-04-15", location: "Ballard Middle School", priority: "medium", status: "todo" },
+    { job: "Boys Soccer - Ballard vs Boone", date: "2026-04-15", dueDate: "2026-04-15", location: "Goeppinger Field", priority: "medium", status: "todo" },
+    { job: "Boys Golf - Woodward-Granger Boys Golf Invitational", date: "2026-04-16", dueDate: "2026-04-16", location: "Woodward Golf Club", priority: "medium", status: "todo" },
+    { job: "Boys Track - Independence vs South Tama County", date: "2026-04-16", dueDate: "2026-04-16", location: "South Tama County High School", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - Pella Dutch Invite", date: "2026-04-17", dueDate: "2026-04-17", location: "Pella Dutch Invite", priority: "medium", status: "todo" },
+    { job: "Boys Track - North Polk Invite", date: "2026-04-17", dueDate: "2026-04-17", location: "North Polk High School", priority: "medium", status: "todo" },
+    { job: "Boys Golf - West Marshall Boys Golf Tournament", date: "2026-04-20", dueDate: "2026-04-20", location: "Lincoln Valley Golf", priority: "medium", status: "todo" },
+    { job: "Boys Golf - Boone vs North Polk", date: "2026-04-21", dueDate: "2026-04-21", location: "North Polk High School", priority: "medium", status: "todo" },
+    { job: "Boys Track - Madrid Boys Track Invite", date: "2026-04-21", dueDate: "2026-04-21", location: "Madrid High School", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - Gilbert vs Boone", date: "2026-04-21", dueDate: "2026-04-21", location: "Goeppinger Field", priority: "medium", status: "todo" },
+    { job: "Boys Soccer - Boone vs Gilbert", date: "2026-04-21", dueDate: "2026-04-21", location: "Gilbert High School", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - Disconsin vs Boone", date: "2026-04-22", dueDate: "2026-04-22", location: "Wettburg College", priority: "medium", status: "todo" },
+    { job: "Boys Golf - North Polk Invitational", date: "2026-04-22", dueDate: "2026-04-22", location: "Otter Creek Golf Course", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - Boone vs Bondurant-Farrer", date: "2026-04-23", dueDate: "2026-04-23", location: "Bondurant-Farrar High School", priority: "medium", status: "todo" },
+    { job: "Boys Track - Tiger Relays", date: "2026-04-23", dueDate: "2026-04-23", location: "Carroll Athletic Stadium", priority: "medium", status: "todo" },
+    { job: "Girls Track - Tiger Relays", date: "2026-04-23", dueDate: "2026-04-23", location: "Carroll Athletic Stadium", priority: "medium", status: "todo" },
+    { job: "Boys Soccer - Boone vs Nevada", date: "2026-04-24", dueDate: "2026-04-24", location: "Nevada SCOR Recreation Complex", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - Boone vs Bondurant-Farrer (AM)", date: "2026-04-25", dueDate: "2026-04-25", location: "Bondurant-Farrar High School", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - Boone vs Bondurant-Farrer (PM)", date: "2026-04-25", dueDate: "2026-04-25", location: "Bondurant-Farrar High School", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - Nevada vs Boone", date: "2026-04-27", dueDate: "2026-04-27", location: "Dodger Tennis Courts", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - Boone vs Fort Dodge", date: "2026-04-27", dueDate: "2026-04-27", location: "Dodger Tennis Courts", priority: "medium", status: "todo" },
+    { job: "Boys Track - DMC B/G Varsity Track Invitational", date: "2026-04-27", dueDate: "2026-04-27", location: "Des Moines Christian School", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - Ballard vs Boone", date: "2026-04-28", dueDate: "2026-04-28", location: "Boone - McHose Park", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - ADM Girls JV/Varsity Invitational", date: "2026-04-28", dueDate: "2026-04-28", location: "ADM High School", priority: "medium", status: "todo" },
+    { job: "Boys Soccer - Carroll vs Boone", date: "2026-04-28", dueDate: "2026-04-28", location: "Goeppinger Field", priority: "medium", status: "todo" },
+    { job: "Girls Soccer - Boone vs Carroll", date: "2026-04-28", dueDate: "2026-04-28", location: "Carroll Athletic Stadium", priority: "medium", status: "todo" },
+    { job: "Boys Tennis - North Polk Tri", date: "2026-04-30", dueDate: "2026-04-30", location: "North Polk High School", priority: "medium", status: "todo" },
+    { job: "Boys Golf - ADM-Boone-Winterset Boys Golf Meet", date: "2026-04-30", dueDate: "2026-04-30", location: "Winterset High School", priority: "medium", status: "todo" }
+  ];
+
+  function updateStatus(message, type = "info") {
+    const el = document.getElementById("status");
+    el.textContent = message;
+    el.className = "status " + type;
+  }
+
+  function updateProgress(current, total) {
+    document.getElementById("progress-text").textContent = `Added ${current} of ${total} events...`;
+  }
+
+  async function startAdding() {
+    document.getElementById("btn-add").disabled = true;
+    updateStatus("Starting to add events...", "info");
+
+    let count = 0;
+    for (const event of events) {
+      try {
+        await db.ref('jobs').push(event);
+        count++;
+        updateProgress(count, events.length);
+      } catch (error) {
+        updateStatus(`Error adding event "${event.job}": ${error.message}`, "error");
+        document.getElementById("btn-add").disabled = false;
+        return;
+      }
+    }
+
+    updateStatus(`✓ Successfully added all ${count} events!`, "success");
+    document.getElementById("progress-text").innerHTML += `<br><br>You can now close this page and view the events in your <a href="index.html" style="color: #58a6ff;">Sports Broadcasting dashboard</a>`;
+  }
+</script>
+
+</body>
+</html>

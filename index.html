@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sports Broadcasting</title>
+  <title>Sports Broadcasting - BoonetTV</title>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
   <style>
@@ -11,360 +11,532 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: #0d1117;
+      background: linear-gradient(135deg, #050708 0%, #0a0e11 50%, #0d1015 100%);
       color: #e6edf3;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    header {
-      background: linear-gradient(135deg, #1a2332 0%, #0d1117 100%);
-      border-bottom: 2px solid #b91c1c;
-      padding: 16px 24px;
+    /* ==================== SPLASH SCREEN ==================== */
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #b91c1c 0%, #8b0000 100%);
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 14px;
+      justify-content: center;
+      z-index: 9999;
+      animation: splashFadeOut 0.8s ease-out 2.2s forwards;
     }
 
-    header .logo {
-      width: 40px;
-      height: 40px;
-      background: #b91c1c;
-      border-radius: 8px;
+    #splash-screen.hidden { display: none; }
+
+    .splash-logo {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 30px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+    }
+
+    .logo-svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+    }
+
+    .logo-letter-b { animation: drawLetter 1.2s ease-out 0.3s forwards; }
+    .logo-tv-text { animation: fadeInTV 0.8s ease-out 1s forwards; opacity: 0; }
+    .logo-accent-line { animation: drawLine 0.6s ease-out 1.3s forwards; stroke-dasharray: 60; stroke-dashoffset: 60; }
+    .logo-background { animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0s forwards; }
+
+    @keyframes drawLetter {
+      from { stroke-dashoffset: 450; opacity: 0; }
+      to { stroke-dashoffset: 0; opacity: 1; }
+    }
+
+    @keyframes fadeInTV {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes drawLine {
+      from { stroke-dashoffset: 60; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .splash-text {
+      text-align: center;
+      opacity: 0;
+      animation: fadeInText 1s ease-out 1.5s forwards;
+    }
+
+    .splash-text h1 {
+      font-size: 48px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .splash-text p {
+      font-size: 16px;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 1px;
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes splashFadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; pointer-events: none; }
+    }
+
+    /* ==================== MAIN LAYOUT ==================== */
+    header {
+      background: rgba(10, 14, 17, 0.4) linear-gradient(180deg, rgba(185, 28, 28, 0.1) 0%, transparent 100%);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(185, 28, 28, 0.2);
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      animation: slideDown 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    header .logo {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      box-shadow: 0 8px 24px rgba(185, 28, 28, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    header .logo:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(185, 28, 28, 0.4);
     }
 
     header h1 {
-      font-size: 22px;
-      font-weight: 700;
+      font-size: 28px;
+      font-weight: 800;
       letter-spacing: 0.5px;
       color: #fff;
     }
 
     header span {
       font-size: 13px;
-      color: #8b949e;
+      color: rgba(185, 28, 28, 0.8);
       margin-left: 4px;
+      font-weight: 600;
     }
 
     .toolbar {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 14px 24px;
-      background: #161b22;
-      border-bottom: 1px solid #30363d;
+      gap: 12px;
+      padding: 16px 32px;
+      background: transparent;
       flex-wrap: wrap;
+      animation: slideUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+      opacity: 0;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     .toolbar input, .toolbar select {
-      background: #0d1117;
-      border: 1px solid #30363d;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: #e6edf3;
-      padding: 7px 12px;
-      border-radius: 6px;
+      padding: 10px 14px;
+      border-radius: 8px;
       font-size: 13px;
       outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+
+    .toolbar input::placeholder { color: rgba(139, 148, 158, 0.6); }
 
     .toolbar input:focus, .toolbar select:focus {
-      border-color: #b91c1c;
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(185, 28, 28, 0.6);
+      box-shadow: 0 0 20px rgba(185, 28, 28, 0.2);
     }
-
-    .toolbar input::placeholder { color: #484f58; }
 
     .toolbar input[name="job"] { width: 200px; }
     .toolbar input[name="date"] { width: 150px; }
     .toolbar input[name="duedate"] { width: 150px; }
     .toolbar input[name="location"] { width: 160px; }
+
     .assignee-pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+      gap: 8px;
       align-items: center;
-      min-height: 32px;
-      background: #0d1117;
-      border: 1px solid #30363d;
-      padding: 4px 8px;
-      border-radius: 6px;
+      min-height: 40px;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 10px;
+      border-radius: 8px;
       flex: 1;
+      transition: all 0.3s ease;
     }
+
+    .assignee-pills:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(185, 28, 28, 0.3);
+    }
+
     .assignee-pill {
-      background: #b91c1c;
+      background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
       color: #fff;
-      padding: 4px 10px;
-      border-radius: 12px;
+      padding: 6px 12px;
+      border-radius: 16px;
       font-size: 12px;
       display: flex;
       align-items: center;
       gap: 6px;
+      box-shadow: 0 4px 12px rgba(185, 28, 28, 0.2);
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
     .assignee-pill .remove {
       cursor: pointer;
       font-weight: bold;
+      transition: transform 0.2s;
     }
-    .assignee-modal {
-      margin-top: 16px;
-    }
-    .assignee-checkboxes {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: 300px;
-      overflow-y: auto;
-    }
-    .assignee-checkbox-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px;
-      cursor: pointer;
-    }
-    .assignee-checkbox-item input {
-      cursor: pointer;
-    }
-    .assignee-badge {
-      display: inline-block;
-      background: #b91c1c;
-      color: #fff;
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 11px;
-      margin-right: 4px;
-      margin-bottom: 2px;
-    }
-    .toolbar select[name="status"] { width: 130px; }
-    .toolbar select[name="priority"] { width: 110px; }
+
+    .assignee-pill .remove:hover { transform: scale(1.3); }
 
     .btn {
-      padding: 7px 16px;
-      border-radius: 6px;
+      padding: 10px 18px;
+      border-radius: 8px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       border: none;
-      transition: all 0.15s;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      letter-spacing: 0.4px;
     }
 
     .btn-primary {
-      background: #b91c1c;
+      background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
       color: #fff;
+      box-shadow: 0 8px 16px rgba(185, 28, 28, 0.25);
     }
-    .btn-primary:hover { background: #dc2626; }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(185, 28, 28, 0.35);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
 
     .btn-secondary {
-      background: #21262d;
+      background: rgba(255, 255, 255, 0.08);
       color: #e6edf3;
-      border: 1px solid #30363d;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
     }
-    .btn-secondary:hover { background: #30363d; }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(185, 28, 28, 0.4);
+      transform: translateY(-2px);
+    }
 
     .btn-danger {
       background: transparent;
       color: #f85149;
-      border: 1px solid #30363d;
+      border: 1px solid rgba(248, 81, 73, 0.3);
       padding: 4px 10px;
       font-size: 12px;
     }
-    .btn-danger:hover { border-color: #f85149; background: #1a0a0a; }
 
-    .manage-staff-btn {
-      margin-left: auto;
+    .btn-danger:hover {
+      border-color: #f85149;
+      background: rgba(248, 81, 73, 0.1);
     }
 
+    .manage-staff-btn { margin-left: auto; }
+
     .main {
-      padding: 20px 24px;
+      padding: 32px;
+      max-width: 1600px;
+      margin: 0 auto;
+      animation: fadeIn 0.8s ease-out 0.3s forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .stats {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
     }
 
     .stat-card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 8px;
-      padding: 12px 20px;
-      min-width: 120px;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(185, 28, 28, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      min-width: 140px;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      animation: slideInUp 0.6s ease-out forwards;
+      opacity: 0;
+    }
+
+    .stat-card:nth-child(1) { animation-delay: 0.1s; }
+    .stat-card:nth-child(2) { animation-delay: 0.15s; }
+    .stat-card:nth-child(3) { animation-delay: 0.2s; }
+    .stat-card:nth-child(4) { animation-delay: 0.25s; }
+    .stat-card:nth-child(5) { animation-delay: 0.3s; }
+
+    @keyframes slideInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(185, 28, 28, 0.4);
+      box-shadow: 0 16px 48px rgba(185, 28, 28, 0.15);
     }
 
     .stat-card .label {
       font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: #8b949e;
-      margin-bottom: 4px;
+      letter-spacing: 1px;
+      color: rgba(139, 148, 158, 0.8);
+      margin-bottom: 8px;
+      font-weight: 600;
     }
 
     .stat-card .value {
-      font-size: 24px;
-      font-weight: 700;
+      font-size: 36px;
+      font-weight: 800;
       color: #e6edf3;
+      background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.8) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-
-    .stat-card.gold .value { color: #b91c1c; }
-    .stat-card.green .value { color: #3fb950; }
-    .stat-card.blue .value { color: #58a6ff; }
-    .stat-card.red .value { color: #f85149; }
 
     .filters {
       display: flex;
-      gap: 8px;
-      margin-bottom: 14px;
+      gap: 12px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
       align-items: center;
+      animation: slideInUp 0.6s ease-out 0.1s forwards;
+      opacity: 0;
     }
 
-    .filters label { font-size: 12px; color: #8b949e; }
+    .filters label { font-size: 12px; color: rgba(139, 148, 158, 0.8); font-weight: 600; }
 
     .filters select, .filters input {
-      background: #161b22;
-      border: 1px solid #30363d;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: #e6edf3;
-      padding: 5px 10px;
+      padding: 8px 12px;
       border-radius: 6px;
       font-size: 12px;
       outline: none;
+      transition: all 0.3s ease;
     }
 
-    .filters select:focus, .filters input:focus { border-color: #b91c1c; }
+    .filters select:focus, .filters input:focus {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(185, 28, 28, 0.6);
+    }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background: #161b22;
-      border-radius: 10px;
+      background: rgba(10, 14, 17, 0.3);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
       overflow: hidden;
-      border: 1px solid #30363d;
+      border: 1px solid rgba(255, 255, 255, 0.1);
       font-size: 13px;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+      animation: slideInUp 0.6s ease-out 0.2s forwards;
+      opacity: 0;
     }
 
     thead tr {
-      background: #1c2128;
-      border-bottom: 2px solid #b91c1c;
+      background: rgba(185, 28, 28, 0.08);
+      border-bottom: 2px solid rgba(185, 28, 28, 0.2);
     }
 
     th {
-      padding: 11px 14px;
+      padding: 14px;
       text-align: left;
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.8px;
-      color: #8b949e;
-      font-weight: 600;
+      color: rgba(185, 28, 28, 0.8);
+      font-weight: 700;
       cursor: pointer;
       user-select: none;
       white-space: nowrap;
+      transition: color 0.3s ease;
     }
 
-    th:hover { color: #b91c1c; }
+    th:hover { color: rgba(185, 28, 28, 1); }
     th .sort-icon { margin-left: 4px; opacity: 0.5; font-size: 10px; }
 
     tbody tr {
-      border-bottom: 1px solid #21262d;
-      transition: background 0.1s;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     tbody tr:last-child { border-bottom: none; }
-    tbody tr:hover { background: #1c2128; }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.06);
+      transform: scale(1.01);
+    }
 
     td {
-      padding: 10px 14px;
+      padding: 12px 14px;
       vertical-align: middle;
     }
 
     td input, td select {
-      background: transparent;
+      background: rgba(255, 255, 255, 0.04);
       border: 1px solid transparent;
       color: #e6edf3;
       font-size: 13px;
-      padding: 4px 6px;
+      padding: 6px 8px;
       border-radius: 4px;
       width: 100%;
       outline: none;
       cursor: pointer;
+      transition: all 0.3s ease;
     }
 
-    td input:hover, td select:hover { border-color: #30363d; }
-    td input:focus, td select:focus { border-color: #b91c1c; background: #0d1117; cursor: text; }
+    td input:hover, td select:hover { border-color: rgba(255, 255, 255, 0.1); }
+    td input:focus, td select:focus { border-color: rgba(185, 28, 28, 0.6); background: rgba(185, 28, 28, 0.1); cursor: text; }
 
-    td select option { background: #0d1117; }
+    td select option { background: #0a0e11; }
 
-    .badge {
+    .assignee-badge {
       display: inline-block;
-      padding: 3px 9px;
+      background: linear-gradient(135deg, rgba(185, 28, 28, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%);
+      color: #fff;
+      padding: 4px 10px;
       border-radius: 12px;
       font-size: 11px;
+      margin-right: 6px;
+      margin-bottom: 2px;
+      box-shadow: 0 4px 12px rgba(185, 28, 28, 0.2);
       font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
     }
-
-    .badge-todo     { background: #21262d; color: #8b949e; border: 1px solid #30363d; }
-    .badge-progress { background: #1a3a5c; color: #58a6ff; border: 1px solid #1f4e8a; }
-    .badge-done     { background: #0f3320; color: #3fb950; border: 1px solid #196c2e; }
-    .badge-cancelled { background: #2d1a1a; color: #f85149; border: 1px solid #6e2a2a; }
-
-    .priority-high   { color: #f85149; font-weight: 700; }
-    .priority-medium { color: #b91c1c; font-weight: 600; }
-    .priority-low    { color: #8b949e; }
-
-    .row-num {
-      color: #484f58;
-      font-size: 11px;
-      text-align: center;
-      width: 30px;
-    }
-
-    .actions { white-space: nowrap; }
 
     .empty-state {
       text-align: center;
-      padding: 60px 20px;
-      color: #484f58;
+      padding: 80px 20px;
+      color: rgba(139, 148, 158, 0.6);
     }
 
-    .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state .icon { font-size: 48px; margin-bottom: 16px; opacity: 0.6; }
     .empty-state p { font-size: 14px; }
 
-    /* Modal */
+    /* ==================== MODALS ==================== */
     .modal-overlay {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 100;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
       align-items: center;
       justify-content: center;
+      animation: fadeIn 0.3s ease-out;
     }
+
     .modal-overlay.open { display: flex; }
 
     .modal {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 12px;
-      padding: 24px;
-      width: 400px;
+      background: rgba(10, 14, 17, 0.8);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 28px;
+      width: 420px;
       max-width: 95vw;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      animation: popModal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .modal h2 { font-size: 16px; margin-bottom: 16px; color: #e6edf3; }
+    @keyframes popModal {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
 
-    .staff-list { list-style: none; margin-bottom: 16px; }
+    .modal h2 { font-size: 18px; margin-bottom: 20px; color: #e6edf3; font-weight: 700; }
+
+    .staff-list { list-style: none; margin-bottom: 20px; }
     .staff-list li {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid #21262d;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       font-size: 13px;
+      transition: all 0.3s ease;
     }
+
+    .staff-list li:hover { padding-left: 4px; }
     .staff-list li:last-child { border-bottom: none; }
 
     .add-staff-row {
@@ -375,28 +547,50 @@
 
     .add-staff-row input {
       flex: 1;
-      background: #0d1117;
-      border: 1px solid #30363d;
+      background: rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: #e6edf3;
-      padding: 7px 12px;
-      border-radius: 6px;
+      padding: 10px 12px;
+      border-radius: 8px;
       font-size: 13px;
       outline: none;
+      transition: all 0.3s ease;
     }
-    .add-staff-row input:focus { border-color: #b91c1c; }
+
+    .add-staff-row input:focus { border-color: rgba(185, 28, 28, 0.6); background: rgba(185, 28, 28, 0.1); }
 
     .modal-footer {
       display: flex;
       justify-content: flex-end;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .loading { opacity: 0.5; pointer-events: none; }
-    .error-msg { color: #f85149; font-size: 12px; padding: 8px; background: rgba(248,81,73,0.1); border-radius: 4px; margin-bottom: 12px; }
+    .assignee-checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 320px;
+      overflow-y: auto;
+      padding: 8px 0;
+    }
 
-    .overdue td { background: rgba(248, 81, 73, 0.06); }
+    .assignee-checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .assignee-checkbox-item:hover { background: rgba(255, 255, 255, 0.06); }
+    .assignee-checkbox-item input { cursor: pointer; }
+
+    .overdue td { background: rgba(248, 81, 73, 0.08); }
     .overdue td:first-child { border-left: 3px solid #f85149; }
-    .due-soon td { background: rgba(185, 28, 28, 0.05); }
+    .due-soon td { background: rgba(185, 28, 28, 0.08); }
     .due-soon td:first-child { border-left: 3px solid #b91c1c; }
     .due-date-overdue { color: #f85149; font-weight: 600; }
     .due-date-soon { color: #b91c1c; font-weight: 600; }
@@ -404,21 +598,48 @@
 </head>
 <body>
 
+<!-- SPLASH SCREEN -->
+<div id="splash-screen">
+  <div class="splash-logo">
+    <svg class="logo-svg" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- Circular background with border -->
+      <circle cx="80" cy="100" r="85" fill="white" class="logo-background" />
+      <circle cx="80" cy="100" r="85" fill="none" stroke="#1a1a1a" stroke-width="4" class="logo-border" />
+
+      <!-- B Letter - Modern geometric style -->
+      <path class="logo-letter-b" d="M 45 60 L 45 140 L 85 140 Q 105 140 105 120 L 105 105 Q 105 95 95 95 L 85 95 L 95 95 Q 105 95 105 80 L 105 65 Q 105 60 95 60 Z M 60 75 L 85 75 Q 95 75 95 82 L 95 90 L 60 90 Z M 60 105 L 85 105 Q 100 105 100 118 L 100 122 Q 100 135 85 135 L 60 135 Z"
+        fill="none" stroke="#b91c1c" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="450" class="logo-b-stroke" />
+
+      <!-- TV Text - Modern sans-serif -->
+      <text x="165" y="125" font-family="Arial, sans-serif" font-size="52" font-weight="900" fill="#1a1a1a" letter-spacing="-2" class="logo-tv-text">
+        <tspan class="logo-tv-fill">TV</tspan>
+      </text>
+
+      <!-- Accent line under TV -->
+      <line x1="150" y1="135" x2="210" y2="135" stroke="#b91c1c" stroke-width="3" stroke-linecap="round" class="logo-accent-line" />
+    </svg>
+  </div>
+  <div class="splash-text">
+    <h1>SPORTS BROADCASTING</h1>
+    <p>Broadcasting Excellence</p>
+  </div>
+</div>
+
 <header>
   <div class="logo">📡</div>
   <h1>Sports Broadcasting</h1>
-  <span>Job Assignment Board</span>
+  <span>powered by BoonetTV</span>
 </header>
 
 <div class="toolbar">
-  <span style="font-size:12px;color:#8b949e;">Event:</span>
+  <span style="font-size:12px;color:rgba(139, 148, 158, 0.8);font-weight:600;">Event:</span>
   <input name="date" type="date" id="inp-date" title="Broadcast / Event Date" />
-  <span style="font-size:12px;color:#8b949e;">Due:</span>
+  <span style="font-size:12px;color:rgba(139, 148, 158, 0.8);font-weight:600;">Due:</span>
   <input name="duedate" type="date" id="inp-duedate" title="Due Date" />
   <input name="job" type="text" placeholder="Job title..." id="inp-job" />
   <input name="location" type="text" placeholder="Location / Venue..." id="inp-location" />
   <div id="assignee-pills-container" class="assignee-pills">
-    <span style="font-size:12px;color:#8b949e;">No one selected</span>
+    <span style="font-size:12px;color:rgba(139, 148, 158, 0.7);">No one selected</span>
   </div>
   <button class="btn btn-secondary" onclick="openAssigneeModal()" style="margin: 0;">Manage Assignees</button>
   <select name="status" id="inp-status">
@@ -439,23 +660,23 @@
 <div class="main">
   <div id="error-container"></div>
   <div class="stats">
-    <div class="stat-card gold">
+    <div class="stat-card">
       <div class="label">Total Jobs</div>
       <div class="value" id="stat-total">0</div>
     </div>
-    <div class="stat-card blue">
+    <div class="stat-card">
       <div class="label">In Progress</div>
       <div class="value" id="stat-progress">0</div>
     </div>
-    <div class="stat-card green">
+    <div class="stat-card">
       <div class="label">Completed</div>
       <div class="value" id="stat-done">0</div>
     </div>
-    <div class="stat-card red">
+    <div class="stat-card">
       <div class="label">Unassigned</div>
       <div class="value" id="stat-unassigned">0</div>
     </div>
-    <div class="stat-card red">
+    <div class="stat-card">
       <div class="label">Overdue</div>
       <div class="value" id="stat-overdue">0</div>
     </div>
@@ -482,7 +703,7 @@
     </select>
     <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
       <input type="checkbox" id="hide-completed" onchange="renderTable()" />
-      <span style="font-size:12px;color:#8b949e;">Hide Completed</span>
+      <span style="font-size:12px;color:rgba(139, 148, 158, 0.8);">Hide Completed</span>
     </label>
   </div>
 
@@ -522,7 +743,7 @@
 
 <!-- Assignee Modal -->
 <div class="modal-overlay" id="assignee-modal">
-  <div class="modal assignee-modal">
+  <div class="modal" style="margin-top: 16px;">
     <h2>Select Assignees for Job</h2>
     <div class="assignee-checkboxes" id="assignee-checkboxes"></div>
     <div class="modal-footer">
@@ -533,12 +754,22 @@
 </div>
 
 <script>
+  // Splash Screen
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const splash = document.getElementById('splash-screen');
+      splash.style.animation = 'splashFadeOut 0.8s ease-out forwards';
+      setTimeout(() => { splash.style.display = 'none'; }, 800);
+    }, 2200);
+  });
+
   let jobs = [];
   let staff = [];
   let selectedAssignees = [];
   let sortCol = 'date';
   let sortDir = 1;
   let firebaseReady = false;
+  let editingJobId = null;
 
   // Initialize Firebase
   const firebaseConfig = {
@@ -623,63 +854,6 @@
     db.ref('jobs/' + id + '/' + field).set(value, (error) => {
       if (error) showError('Update failed: ' + error.message);
     });
-  }
-
-  let editingJobId = null;
-
-  function openAssigneeModal() {
-    const container = document.getElementById('assignee-checkboxes');
-    container.innerHTML = staff.map(s => `
-      <label class="assignee-checkbox-item">
-        <input type="checkbox" value="${esc(s)}" ${selectedAssignees.includes(s) ? 'checked' : ''} />
-        ${esc(s)}
-      </label>
-    `).join('');
-    document.getElementById('assignee-modal').classList.add('open');
-  }
-
-  function closeAssigneeModal() {
-    document.getElementById('assignee-modal').classList.remove('open');
-  }
-
-  function confirmAssignees() {
-    const checked = document.querySelectorAll('#assignee-checkboxes input:checked');
-    const newAssignees = Array.from(checked).map(cb => cb.value);
-
-    if (editingJobId) {
-      updateJob(editingJobId, 'assignees', newAssignees);
-      editingJobId = null;
-    } else {
-      selectedAssignees = newAssignees;
-      updateAssigneeDisplay();
-    }
-    closeAssigneeModal();
-  }
-
-  function updateAssigneeDisplay() {
-    const container = document.getElementById('assignee-pills-container');
-    if (selectedAssignees.length === 0) {
-      container.innerHTML = '<span style="font-size:12px;color:#8b949e;">No one selected</span>';
-    } else {
-      container.innerHTML = selectedAssignees.map(name => `
-        <div class="assignee-pill">
-          ${esc(name)}
-          <span class="remove" onclick="removeAssignee('${esc(name)}')">×</span>
-        </div>
-      `).join('');
-    }
-  }
-
-  function removeAssignee(name) {
-    selectedAssignees = selectedAssignees.filter(a => a !== name);
-    updateAssigneeDisplay();
-  }
-
-  function editJobAssignees(jobId) {
-    editingJobId = jobId;
-    const job = jobs.find(j => j.id === jobId);
-    selectedAssignees = (job.assignees || []).slice();
-    openAssigneeModal();
   }
 
   function sortBy(col) {
@@ -799,7 +973,7 @@
     const ul = document.getElementById('staff-list');
     ul.innerHTML = staff.length
       ? staff.map((s) => `<li><span>${esc(s)}</span><button class="btn btn-danger" onclick="removeStaff('${esc(s)}')">Remove</button></li>`).join('')
-      : '<li style="color:#484f58">No staff added yet.</li>';
+      : '<li style="color:#8b949e">No staff added yet.</li>';
   }
 
   function addStaff() {
@@ -825,8 +999,67 @@
     });
   }
 
+  function openAssigneeModal() {
+    const container = document.getElementById('assignee-checkboxes');
+    container.innerHTML = staff.map(s => `
+      <label class="assignee-checkbox-item">
+        <input type="checkbox" value="${esc(s)}" ${selectedAssignees.includes(s) ? 'checked' : ''} />
+        ${esc(s)}
+      </label>
+    `).join('');
+    document.getElementById('assignee-modal').classList.add('open');
+  }
+
+  function closeAssigneeModal() {
+    document.getElementById('assignee-modal').classList.remove('open');
+  }
+
+  function confirmAssignees() {
+    const checked = document.querySelectorAll('#assignee-checkboxes input:checked');
+    const newAssignees = Array.from(checked).map(cb => cb.value);
+
+    if (editingJobId) {
+      updateJob(editingJobId, 'assignees', newAssignees);
+      editingJobId = null;
+    } else {
+      selectedAssignees = newAssignees;
+      updateAssigneeDisplay();
+    }
+    closeAssigneeModal();
+  }
+
+  function updateAssigneeDisplay() {
+    const container = document.getElementById('assignee-pills-container');
+    if (selectedAssignees.length === 0) {
+      container.innerHTML = '<span style="font-size:12px;color:rgba(139, 148, 158, 0.7);">No one selected</span>';
+    } else {
+      container.innerHTML = selectedAssignees.map(name => `
+        <div class="assignee-pill">
+          ${esc(name)}
+          <span class="remove" onclick="removeAssignee('${esc(name)}')">×</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  function removeAssignee(name) {
+    selectedAssignees = selectedAssignees.filter(a => a !== name);
+    updateAssigneeDisplay();
+  }
+
+  function editJobAssignees(jobId) {
+    editingJobId = jobId;
+    const job = jobs.find(j => j.id === jobId);
+    selectedAssignees = (job.assignees || []).slice();
+    openAssigneeModal();
+  }
+
   document.getElementById('staff-modal').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeStaffModal();
+  });
+
+  document.getElementById('assignee-modal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeAssigneeModal();
   });
 
   // Set today as default date
