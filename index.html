@@ -79,9 +79,13 @@
         opacity: 1;
         transform: scale(1);
       }
-      70% {
+      75% {
         opacity: 1;
         transform: scale(1);
+      }
+      95% {
+        opacity: 0.1;
+        transform: scale(1.02);
       }
       100% {
         opacity: 0;
@@ -618,46 +622,46 @@
 <!-- SPLASH SCREEN -->
 <div id="splash-screen">
   <div class="splash-container">
-    <svg class="logo-svg" viewBox="0 0 280 260" xmlns="http://www.w3.org/2000/svg">
+    <svg class="logo-svg" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
       <!-- White circle background -->
-      <circle cx="90" cy="130" r="105" fill="white" />
+      <circle cx="110" cy="150" r="125" fill="white" />
 
-      <!-- Black circle border -->
-      <circle cx="90" cy="130" r="105" fill="none" stroke="#000000" stroke-width="6" />
+      <!-- Black circle border - thick -->
+      <circle cx="110" cy="150" r="125" fill="none" stroke="#000000" stroke-width="8" />
 
-      <!-- Red B - Outer outline -->
-      <path d="M 45 55 L 45 205 L 105 205 Q 125 205 125 190 L 125 175 Q 125 165 110 160 L 125 160 Q 140 155 140 138 L 140 72 Q 140 55 125 55 Z M 65 75 L 105 75 Q 120 75 120 88 L 120 145 L 65 145 Z M 65 170 L 120 170 Q 132 170 132 183 L 132 193 Q 132 203 105 203 L 65 203 Z"
-        fill="none" stroke="#b91c1c" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" />
-
-      <!-- Red B - Main fill -->
-      <path d="M 55 62 L 55 198 L 105 198 Q 120 198 120 185 L 120 172 Q 120 162 108 158 L 120 158 Q 133 153 133 137 L 133 80 Q 133 62 120 62 Z M 68 82 L 105 82 Q 116 82 116 93 L 116 140 L 68 140 Z M 68 165 L 116 165 Q 126 165 126 177 L 126 188 Q 126 196 105 196 L 68 196 Z"
+      <!-- Red background for B -->
+      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z"
         fill="#b91c1c" />
 
-      <!-- White outline strokes for depth -->
-      <path d="M 55 62 L 55 198 L 105 198 Q 120 198 120 185 L 120 172 Q 120 162 108 158 L 120 158 Q 133 153 133 137 L 133 80 Q 133 62 120 62 Z M 68 82 L 105 82 Q 116 82 116 93 L 116 140 L 68 140 Z M 68 165 L 116 165 Q 126 165 126 177 L 126 188 Q 126 196 105 196 L 68 196 Z"
-        fill="none" stroke="white" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+      <!-- White outer strokes for beveled 3D effect -->
+      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z"
+        fill="none" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" />
 
-      <!-- TV Text - Black, positioned to the right -->
-      <text x="155" y="160" font-family="Arial, sans-serif" font-size="85" font-weight="900" fill="#000000" letter-spacing="1" class="logo-tv-text">TV</text>
+      <!-- Red outline strokes for beveled effect -->
+      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z"
+        fill="none" stroke="#b91c1c" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
+
+      <!-- TV Text - Bold black, positioned to the right -->
+      <text x="185" y="185" font-family="Arial, sans-serif" font-size="100" font-weight="900" fill="#000000" letter-spacing="0" class="logo-tv-text">TV</text>
     </svg>
   </div>
 </div>
 
 <header>
   <div class="logo">
-    <svg width="48" height="48" viewBox="0 0 280 260" xmlns="http://www.w3.org/2000/svg">
+    <svg width="50" height="50" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
       <!-- White circle background -->
-      <circle cx="90" cy="130" r="105" fill="white" />
+      <circle cx="110" cy="150" r="125" fill="white" />
       <!-- Black circle border -->
-      <circle cx="90" cy="130" r="105" fill="none" stroke="#000000" stroke-width="6" />
-      <!-- Red B - Outer outline -->
-      <path d="M 45 55 L 45 205 L 105 205 Q 125 205 125 190 L 125 175 Q 125 165 110 160 L 125 160 Q 140 155 140 138 L 140 72 Q 140 55 125 55 Z M 65 75 L 105 75 Q 120 75 120 88 L 120 145 L 65 145 Z M 65 170 L 120 170 Q 132 170 132 183 L 132 193 Q 132 203 105 203 L 65 203 Z" fill="none" stroke="#b91c1c" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" />
-      <!-- Red B - Main fill -->
-      <path d="M 55 62 L 55 198 L 105 198 Q 120 198 120 185 L 120 172 Q 120 162 108 158 L 120 158 Q 133 153 133 137 L 133 80 Q 133 62 120 62 Z M 68 82 L 105 82 Q 116 82 116 93 L 116 140 L 68 140 Z M 68 165 L 116 165 Q 126 165 126 177 L 126 188 Q 126 196 105 196 L 68 196 Z" fill="#b91c1c" />
-      <!-- White outline strokes for depth -->
-      <path d="M 55 62 L 55 198 L 105 198 Q 120 198 120 185 L 120 172 Q 120 162 108 158 L 120 158 Q 133 153 133 137 L 133 80 Q 133 62 120 62 Z M 68 82 L 105 82 Q 116 82 116 93 L 116 140 L 68 140 Z M 68 165 L 116 165 Q 126 165 126 177 L 126 188 Q 126 196 105 196 L 68 196 Z" fill="none" stroke="white" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
+      <circle cx="110" cy="150" r="125" fill="none" stroke="#000000" stroke-width="8" />
+      <!-- Red background for B -->
+      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z" fill="#b91c1c" />
+      <!-- White outer strokes -->
+      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z" fill="none" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" />
+      <!-- Red outline strokes -->
+      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z" fill="none" stroke="#b91c1c" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
       <!-- TV Text -->
-      <text x="155" y="160" font-family="Arial, sans-serif" font-size="85" font-weight="900" fill="#000000" letter-spacing="1">TV</text>
+      <text x="185" y="185" font-family="Arial, sans-serif" font-size="100" font-weight="900" fill="#000000" letter-spacing="0">TV</text>
     </svg>
   </div>
   <h1>Sports Broadcasting</h1>
