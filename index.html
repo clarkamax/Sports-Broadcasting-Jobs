@@ -50,29 +50,29 @@
       filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
     }
 
-    .logo-letter-b { animation: drawLetter 1.2s ease-out 0.3s forwards; }
-    .logo-tv-text { animation: fadeInTV 0.8s ease-out 1s forwards; opacity: 0; }
-    .logo-accent-line { animation: drawLine 0.6s ease-out 1.3s forwards; stroke-dasharray: 60; stroke-dashoffset: 60; }
-    .logo-background { animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0s forwards; }
-
-    @keyframes drawLetter {
-      from { stroke-dashoffset: 450; opacity: 0; }
-      to { stroke-dashoffset: 0; opacity: 1; }
-    }
-
-    @keyframes fadeInTV {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes drawLine {
-      from { stroke-dashoffset: 60; }
-      to { stroke-dashoffset: 0; }
-    }
+    .logo-background { animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0s forwards; }
+    .logo-letter-b { animation: fillB 1s ease-out 0.3s forwards; fill-opacity: 0; }
+    .logo-tv-text { animation: fadeInTV 0.7s ease-out 1s forwards; opacity: 0; }
+    .logo-accent-dot { animation: popDot 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1.3s forwards; opacity: 0; }
 
     @keyframes popIn {
       from { transform: scale(0.8); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes fillB {
+      from { fill-opacity: 0; }
+      to { fill-opacity: 1; }
+    }
+
+    @keyframes fadeInTV {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes popDot {
+      from { opacity: 0; transform: scale(0); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .splash-text {
@@ -601,22 +601,22 @@
 <!-- SPLASH SCREEN -->
 <div id="splash-screen">
   <div class="splash-logo">
-    <svg class="logo-svg" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
-      <!-- Circular background with border -->
-      <circle cx="80" cy="100" r="85" fill="white" class="logo-background" />
-      <circle cx="80" cy="100" r="85" fill="none" stroke="#1a1a1a" stroke-width="4" class="logo-border" />
+    <svg class="logo-svg" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- Circular background -->
+      <circle cx="70" cy="100" r="75" fill="white" class="logo-background" />
+      <circle cx="70" cy="100" r="75" fill="none" stroke="#0a0a0a" stroke-width="3" class="logo-border" />
 
-      <!-- B Letter - Modern geometric style -->
-      <path class="logo-letter-b" d="M 45 60 L 45 140 L 85 140 Q 105 140 105 120 L 105 105 Q 105 95 95 95 L 85 95 L 95 95 Q 105 95 105 80 L 105 65 Q 105 60 95 60 Z M 60 75 L 85 75 Q 95 75 95 82 L 95 90 L 60 90 Z M 60 105 L 85 105 Q 100 105 100 118 L 100 122 Q 100 135 85 135 L 60 135 Z"
-        fill="none" stroke="#b91c1c" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="450" class="logo-b-stroke" />
+      <!-- B Letter - Smooth modern design -->
+      <g class="logo-b-group">
+        <path d="M 48 65 L 48 135 Q 48 138 51 138 L 75 138 Q 88 138 88 128 L 88 118 Q 88 110 80 108 L 88 108 Q 96 106 96 95 L 96 70 Q 96 65 88 65 L 51 65 Q 48 65 48 68 Z M 57 74 L 78 74 Q 84 74 84 80 L 84 102 L 57 102 Z M 57 111 L 85 111 Q 90 111 90 117 L 90 128 Q 90 135 80 135 L 57 135 Z"
+          fill="#b91c1c" class="logo-letter-b" stroke-dasharray="500" />
+      </g>
 
-      <!-- TV Text - Modern sans-serif -->
-      <text x="165" y="125" font-family="Arial, sans-serif" font-size="52" font-weight="900" fill="#1a1a1a" letter-spacing="-2" class="logo-tv-text">
-        <tspan class="logo-tv-fill">TV</tspan>
-      </text>
+      <!-- TV Text - Clean modern sans-serif -->
+      <text x="155" y="128" font-family="'Helvetica Neue', Arial, sans-serif" font-size="56" font-weight="800" fill="#1a1a1a" class="logo-tv-text">TV</text>
 
-      <!-- Accent line under TV -->
-      <line x1="150" y1="135" x2="210" y2="135" stroke="#b91c1c" stroke-width="3" stroke-linecap="round" class="logo-accent-line" />
+      <!-- Accent dot after TV -->
+      <circle cx="215" cy="110" r="4" fill="#b91c1c" class="logo-accent-dot" />
     </svg>
   </div>
   <div class="splash-text">
@@ -626,7 +626,15 @@
 </div>
 
 <header>
-  <div class="logo">📡</div>
+  <div class="logo">
+    <svg width="40" height="40" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="70" cy="100" r="75" fill="white" />
+      <circle cx="70" cy="100" r="75" fill="none" stroke="#0a0a0a" stroke-width="3" />
+      <path d="M 48 65 L 48 135 Q 48 138 51 138 L 75 138 Q 88 138 88 128 L 88 118 Q 88 110 80 108 L 88 108 Q 96 106 96 95 L 96 70 Q 96 65 88 65 L 51 65 Q 48 65 48 68 Z M 57 74 L 78 74 Q 84 74 84 80 L 84 102 L 57 102 Z M 57 111 L 85 111 Q 90 111 90 117 L 90 128 Q 90 135 80 135 L 57 135 Z" fill="#b91c1c" />
+      <text x="155" y="128" font-family="'Helvetica Neue', Arial, sans-serif" font-size="56" font-weight="800" fill="#1a1a1a">TV</text>
+      <circle cx="215" cy="110" r="4" fill="#b91c1c" />
+    </svg>
+  </div>
   <h1>Sports Broadcasting</h1>
   <span>powered by BoonetTV</span>
 </header>
