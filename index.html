@@ -30,10 +30,18 @@
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      animation: splashFadeOut 1.2s ease-in-out 2.5s forwards;
+      animation: netflixTransition 2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.5s forwards;
     }
 
     #splash-screen.hidden { display: none; }
+
+    .splash-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
 
     .splash-logo {
       width: 200px;
@@ -50,29 +58,37 @@
       filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
     }
 
-    .logo-background { animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0s forwards; }
-    .logo-b-outline { animation: drawOutline 0.8s ease-out 0.3s forwards; opacity: 1; }
-    .logo-b-fill { animation: fillB 0.8s ease-out 0.5s forwards; }
-    .logo-tv-text { animation: fadeInTV 0.8s ease-out 1.2s forwards; opacity: 0; }
+    .logo-svg { animation: netflixScale 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s forwards; }
 
-    @keyframes popIn {
-      from { transform: scale(0.85); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    @keyframes netflixScale {
+      0% {
+        transform: scale(0.3);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
 
-    @keyframes drawOutline {
-      from { stroke-dashoffset: 600; opacity: 0; }
-      to { stroke-dashoffset: 0; opacity: 0.8; }
-    }
-
-    @keyframes fillB {
-      from { fill-opacity: 0; }
-      to { fill-opacity: 1; }
-    }
-
-    @keyframes fadeInTV {
-      from { opacity: 0; transform: scale(0.9) translateY(15px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
+    @keyframes netflixTransition {
+      0% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      70% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(1.05);
+        pointer-events: none;
+        visibility: hidden;
+      }
     }
 
     .splash-text {
@@ -601,41 +617,50 @@
 
 <!-- SPLASH SCREEN -->
 <div id="splash-screen">
-  <div class="splash-logo">
-    <svg class="logo-svg" viewBox="0 0 280 240" xmlns="http://www.w3.org/2000/svg">
-      <!-- Circular background with border -->
-      <circle cx="100" cy="120" r="105" fill="white" class="logo-background" />
-      <circle cx="100" cy="120" r="105" fill="none" stroke="#1a1a1a" stroke-width="4" class="logo-border" />
+  <div class="splash-container">
+    <svg class="logo-svg" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
+      <!-- Circular white background -->
+      <circle cx="100" cy="140" r="110" fill="white" class="logo-background" />
 
-      <!-- B Letter - Classic sports logo style with depth -->
-      <g class="logo-letter-b">
-        <!-- Outer stroke for depth -->
-        <path d="M 58 70 L 58 170 L 115 170 Q 135 170 135 150 L 135 138 Q 135 125 120 122 L 135 122 Q 150 120 150 105 L 150 85 Q 150 70 130 70 Z M 75 88 L 115 88 Q 128 88 128 100 L 128 118 L 75 118 Z M 75 135 L 125 135 Q 138 135 138 148 L 138 155 Q 138 168 115 168 L 75 168 Z"
-          fill="none" stroke="#ffffff" stroke-width="6" stroke-linejoin="round" class="logo-b-outline" opacity="0" />
-        <!-- Main B fill -->
-        <path d="M 58 70 L 58 170 L 115 170 Q 135 170 135 150 L 135 138 Q 135 125 120 122 L 135 122 Q 150 120 150 105 L 150 85 Q 150 70 130 70 Z M 75 88 L 115 88 Q 128 88 128 100 L 128 118 L 75 118 Z M 75 135 L 125 135 Q 138 135 138 148 L 138 155 Q 138 168 115 168 L 75 168 Z"
-          fill="#b91c1c" class="logo-b-fill" />
+      <!-- Outer circle border -->
+      <circle cx="100" cy="140" r="110" fill="none" stroke="#1a1a1a" stroke-width="5" class="logo-border" />
+
+      <!-- B Letter with outline depth effect -->
+      <g class="logo-b-group">
+        <!-- Outer red border for depth -->
+        <path d="M 50 65 L 50 215 L 115 215 Q 140 215 140 195 L 140 180 Q 140 165 120 160 L 140 160 Q 160 155 160 135 L 160 80 Q 160 65 140 65 Z M 70 90 L 115 90 Q 130 90 130 105 L 130 150 L 70 150 Z M 70 175 L 130 175 Q 145 175 145 190 L 145 200 Q 145 210 115 210 L 70 210 Z"
+          fill="none" stroke="#b91c1c" stroke-width="8" stroke-linejoin="round" class="logo-b-border" />
+
+        <!-- White fill (inner) for depth -->
+        <path d="M 58 73 L 58 207 L 115 207 Q 135 207 135 190 L 135 178 Q 135 168 118 163 L 135 163 Q 152 158 152 140 L 152 85 Q 152 73 135 73 Z M 70 98 L 115 98 Q 128 98 128 110 L 128 143 L 70 143 Z M 70 170 L 128 170 Q 140 170 140 183 L 140 195 Q 140 205 115 205 L 70 205 Z"
+          fill="white" stroke="#b91c1c" stroke-width="5" stroke-linejoin="round" class="logo-b-fill" />
+
+        <!-- Red inner B -->
+        <path d="M 62 80 L 62 200 L 110 200 Q 128 200 128 185 L 128 175 Q 128 165 115 162 L 128 162 Q 143 158 143 142 L 143 92 Q 143 80 128 80 Z M 78 100 L 110 100 Q 122 100 122 110 L 122 140 L 78 140 Z M 78 168 L 122 168 Q 133 168 133 180 L 133 190 Q 133 198 110 198 L 78 198 Z"
+          fill="#b91c1c" class="logo-b-main" />
       </g>
 
-      <!-- TV Text - Bold sports style -->
-      <text x="170" y="150" font-family="Arial, sans-serif" font-size="72" font-weight="900" fill="#1a1a1a" letter-spacing="2" class="logo-tv-text">TV</text>
+      <!-- TV Text - Bold and prominent -->
+      <text x="165" y="165" font-family="Arial, sans-serif" font-size="78" font-weight="900" fill="#1a1a1a" letter-spacing="3" class="logo-tv-text">TV</text>
     </svg>
-  </div>
-  <div class="splash-text">
-    <h1>SPORTS BROADCASTING</h1>
-    <p>Broadcasting Excellence</p>
   </div>
 </div>
 
 <header>
   <div class="logo">
-    <svg width="40" height="40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="100" cy="100" r="95" fill="white" />
-      <circle cx="100" cy="100" r="95" fill="none" stroke="#1a1a1a" stroke-width="3" />
-      <!-- B with outline effect -->
-      <path d="M 55 60 L 55 140 L 100 140 Q 115 140 115 128 L 115 118 Q 115 108 105 106 L 115 106 Q 125 104 125 92 L 125 72 Q 125 60 110 60 Z M 68 72 L 100 72 Q 110 72 110 80 L 110 100 L 68 100 Z M 68 113 L 105 113 Q 115 113 115 122 L 115 128 Q 115 138 100 138 L 68 138 Z" fill="#b91c1c" />
-      <!-- TV text -->
-      <text x="140" y="125" font-family="Arial, sans-serif" font-size="48" font-weight="900" fill="#1a1a1a">TV</text>
+    <svg width="44" height="44" viewBox="0 0 300 280" xmlns="http://www.w3.org/2000/svg">
+      <!-- Circular white background -->
+      <circle cx="100" cy="140" r="110" fill="white" />
+      <!-- Outer circle border -->
+      <circle cx="100" cy="140" r="110" fill="none" stroke="#1a1a1a" stroke-width="4" />
+      <!-- B outer red border for depth -->
+      <path d="M 50 65 L 50 215 L 115 215 Q 140 215 140 195 L 140 180 Q 140 165 120 160 L 140 160 Q 160 155 160 135 L 160 80 Q 160 65 140 65 Z M 70 90 L 115 90 Q 130 90 130 105 L 130 150 L 70 150 Z M 70 175 L 130 175 Q 145 175 145 190 L 145 200 Q 145 210 115 210 L 70 210 Z" fill="none" stroke="#b91c1c" stroke-width="7" stroke-linejoin="round" />
+      <!-- B white fill -->
+      <path d="M 58 73 L 58 207 L 115 207 Q 135 207 135 190 L 135 178 Q 135 168 118 163 L 135 163 Q 152 158 152 140 L 152 85 Q 152 73 135 73 Z M 70 98 L 115 98 Q 128 98 128 110 L 128 143 L 70 143 Z M 70 170 L 128 170 Q 140 170 140 183 L 140 195 Q 140 205 115 205 L 70 205 Z" fill="white" stroke="#b91c1c" stroke-width="4" stroke-linejoin="round" />
+      <!-- B red main -->
+      <path d="M 62 80 L 62 200 L 110 200 Q 128 200 128 185 L 128 175 Q 128 165 115 162 L 128 162 Q 143 158 143 142 L 143 92 Q 143 80 128 80 Z M 78 100 L 110 100 Q 122 100 122 110 L 122 140 L 78 140 Z M 78 168 L 122 168 Q 133 168 133 180 L 133 190 Q 133 198 110 198 L 78 198 Z" fill="#b91c1c" />
+      <!-- TV Text -->
+      <text x="165" y="165" font-family="Arial, sans-serif" font-size="72" font-weight="900" fill="#1a1a1a" letter-spacing="2">TV</text>
     </svg>
   </div>
   <h1>Sports Broadcasting</h1>
@@ -764,13 +789,13 @@
 </div>
 
 <script>
-  // Splash Screen
+  // Splash Screen - Netflix style
   window.addEventListener('load', () => {
+    const splash = document.getElementById('splash-screen');
+    // Splash plays for 1.5s scale + 1.5s pause + 2.8s transition = ~5.8s total
     setTimeout(() => {
-      const splash = document.getElementById('splash-screen');
-      splash.style.animation = 'splashFadeOut 1.2s ease-in-out forwards';
-      setTimeout(() => { splash.style.display = 'none'; }, 1200);
-    }, 2500);
+      splash.style.display = 'none';
+    }, 4300);
   });
 
   let jobs = [];
