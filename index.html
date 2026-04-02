@@ -480,6 +480,10 @@
       <option value="medium">Medium</option>
       <option value="low">Low</option>
     </select>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+      <input type="checkbox" id="hide-completed" onchange="renderTable()" />
+      <span style="font-size:12px;color:#8b949e;">Hide Completed</span>
+    </label>
   </div>
 
   <table>
@@ -689,12 +693,14 @@
     const fStatus = document.getElementById('filter-status').value;
     const fAssignee = document.getElementById('filter-assignee').value;
     const fPriority = document.getElementById('filter-priority').value;
+    const hideCompleted = document.getElementById('hide-completed').checked;
     return jobs.filter(j => {
       const assigneeStr = (j.assignees || []).join(' ').toLowerCase();
       if (search && !j.job.toLowerCase().includes(search) && !j.location.toLowerCase().includes(search) && !assigneeStr.includes(search)) return false;
       if (fStatus && j.status !== fStatus) return false;
       if (fAssignee && !j.assignees?.includes(fAssignee)) return false;
       if (fPriority && j.priority !== fPriority) return false;
+      if (hideCompleted && (j.status === 'done' || j.status === 'cancelled')) return false;
       return true;
     }).sort((a, b) => {
       let av = a[sortCol] || '', bv = b[sortCol] || '';
