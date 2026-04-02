@@ -30,7 +30,7 @@
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      animation: splashFadeOut 0.8s ease-out 2.2s forwards;
+      animation: splashFadeOut 1.2s ease-in-out 2.5s forwards;
     }
 
     #splash-screen.hidden { display: none; }
@@ -50,14 +50,19 @@
       filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
     }
 
-    .logo-background { animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0s forwards; }
-    .logo-letter-b { animation: fillB 1s ease-out 0.3s forwards; fill-opacity: 0; }
-    .logo-tv-text { animation: fadeInTV 0.7s ease-out 1s forwards; opacity: 0; }
-    .logo-accent-dot { animation: popDot 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1.3s forwards; opacity: 0; }
+    .logo-background { animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0s forwards; }
+    .logo-b-outline { animation: drawOutline 0.8s ease-out 0.3s forwards; opacity: 1; }
+    .logo-b-fill { animation: fillB 0.8s ease-out 0.5s forwards; }
+    .logo-tv-text { animation: fadeInTV 0.8s ease-out 1.2s forwards; opacity: 0; }
 
     @keyframes popIn {
-      from { transform: scale(0.8); opacity: 0; }
+      from { transform: scale(0.85); opacity: 0; }
       to { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes drawOutline {
+      from { stroke-dashoffset: 600; opacity: 0; }
+      to { stroke-dashoffset: 0; opacity: 0.8; }
     }
 
     @keyframes fillB {
@@ -66,13 +71,8 @@
     }
 
     @keyframes fadeInTV {
-      from { opacity: 0; transform: translateX(-10px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    @keyframes popDot {
-      from { opacity: 0; transform: scale(0); }
-      to { opacity: 1; transform: scale(1); }
+      from { opacity: 0; transform: scale(0.9) translateY(15px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .splash-text {
@@ -102,8 +102,9 @@
     }
 
     @keyframes splashFadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; pointer-events: none; }
+      0% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { opacity: 0; pointer-events: none; visibility: hidden; }
     }
 
     /* ==================== MAIN LAYOUT ==================== */
@@ -601,22 +602,23 @@
 <!-- SPLASH SCREEN -->
 <div id="splash-screen">
   <div class="splash-logo">
-    <svg class="logo-svg" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
-      <!-- Circular background -->
-      <circle cx="70" cy="100" r="75" fill="white" class="logo-background" />
-      <circle cx="70" cy="100" r="75" fill="none" stroke="#0a0a0a" stroke-width="3" class="logo-border" />
+    <svg class="logo-svg" viewBox="0 0 280 240" xmlns="http://www.w3.org/2000/svg">
+      <!-- Circular background with border -->
+      <circle cx="100" cy="120" r="105" fill="white" class="logo-background" />
+      <circle cx="100" cy="120" r="105" fill="none" stroke="#1a1a1a" stroke-width="4" class="logo-border" />
 
-      <!-- B Letter - Smooth modern design -->
-      <g class="logo-b-group">
-        <path d="M 48 65 L 48 135 Q 48 138 51 138 L 75 138 Q 88 138 88 128 L 88 118 Q 88 110 80 108 L 88 108 Q 96 106 96 95 L 96 70 Q 96 65 88 65 L 51 65 Q 48 65 48 68 Z M 57 74 L 78 74 Q 84 74 84 80 L 84 102 L 57 102 Z M 57 111 L 85 111 Q 90 111 90 117 L 90 128 Q 90 135 80 135 L 57 135 Z"
-          fill="#b91c1c" class="logo-letter-b" stroke-dasharray="500" />
+      <!-- B Letter - Classic sports logo style with depth -->
+      <g class="logo-letter-b">
+        <!-- Outer stroke for depth -->
+        <path d="M 58 70 L 58 170 L 115 170 Q 135 170 135 150 L 135 138 Q 135 125 120 122 L 135 122 Q 150 120 150 105 L 150 85 Q 150 70 130 70 Z M 75 88 L 115 88 Q 128 88 128 100 L 128 118 L 75 118 Z M 75 135 L 125 135 Q 138 135 138 148 L 138 155 Q 138 168 115 168 L 75 168 Z"
+          fill="none" stroke="#ffffff" stroke-width="6" stroke-linejoin="round" class="logo-b-outline" opacity="0" />
+        <!-- Main B fill -->
+        <path d="M 58 70 L 58 170 L 115 170 Q 135 170 135 150 L 135 138 Q 135 125 120 122 L 135 122 Q 150 120 150 105 L 150 85 Q 150 70 130 70 Z M 75 88 L 115 88 Q 128 88 128 100 L 128 118 L 75 118 Z M 75 135 L 125 135 Q 138 135 138 148 L 138 155 Q 138 168 115 168 L 75 168 Z"
+          fill="#b91c1c" class="logo-b-fill" />
       </g>
 
-      <!-- TV Text - Clean modern sans-serif -->
-      <text x="155" y="128" font-family="'Helvetica Neue', Arial, sans-serif" font-size="56" font-weight="800" fill="#1a1a1a" class="logo-tv-text">TV</text>
-
-      <!-- Accent dot after TV -->
-      <circle cx="215" cy="110" r="4" fill="#b91c1c" class="logo-accent-dot" />
+      <!-- TV Text - Bold sports style -->
+      <text x="170" y="150" font-family="Arial, sans-serif" font-size="72" font-weight="900" fill="#1a1a1a" letter-spacing="2" class="logo-tv-text">TV</text>
     </svg>
   </div>
   <div class="splash-text">
@@ -627,16 +629,16 @@
 
 <header>
   <div class="logo">
-    <svg width="40" height="40" viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="70" cy="100" r="75" fill="white" />
-      <circle cx="70" cy="100" r="75" fill="none" stroke="#0a0a0a" stroke-width="3" />
-      <path d="M 48 65 L 48 135 Q 48 138 51 138 L 75 138 Q 88 138 88 128 L 88 118 Q 88 110 80 108 L 88 108 Q 96 106 96 95 L 96 70 Q 96 65 88 65 L 51 65 Q 48 65 48 68 Z M 57 74 L 78 74 Q 84 74 84 80 L 84 102 L 57 102 Z M 57 111 L 85 111 Q 90 111 90 117 L 90 128 Q 90 135 80 135 L 57 135 Z" fill="#b91c1c" />
-      <text x="155" y="128" font-family="'Helvetica Neue', Arial, sans-serif" font-size="56" font-weight="800" fill="#1a1a1a">TV</text>
-      <circle cx="215" cy="110" r="4" fill="#b91c1c" />
+    <svg width="40" height="40" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="100" cy="100" r="95" fill="white" />
+      <circle cx="100" cy="100" r="95" fill="none" stroke="#1a1a1a" stroke-width="3" />
+      <!-- B with outline effect -->
+      <path d="M 55 60 L 55 140 L 100 140 Q 115 140 115 128 L 115 118 Q 115 108 105 106 L 115 106 Q 125 104 125 92 L 125 72 Q 125 60 110 60 Z M 68 72 L 100 72 Q 110 72 110 80 L 110 100 L 68 100 Z M 68 113 L 105 113 Q 115 113 115 122 L 115 128 Q 115 138 100 138 L 68 138 Z" fill="#b91c1c" />
+      <!-- TV text -->
+      <text x="140" y="125" font-family="Arial, sans-serif" font-size="48" font-weight="900" fill="#1a1a1a">TV</text>
     </svg>
   </div>
   <h1>Sports Broadcasting</h1>
-  <span>powered by BoonetTV</span>
 </header>
 
 <div class="toolbar">
@@ -766,9 +768,9 @@
   window.addEventListener('load', () => {
     setTimeout(() => {
       const splash = document.getElementById('splash-screen');
-      splash.style.animation = 'splashFadeOut 0.8s ease-out forwards';
-      setTimeout(() => { splash.style.display = 'none'; }, 800);
-    }, 2200);
+      splash.style.animation = 'splashFadeOut 1.2s ease-in-out forwards';
+      setTimeout(() => { splash.style.display = 'none'; }, 1200);
+    }, 2500);
   });
 
   let jobs = [];
