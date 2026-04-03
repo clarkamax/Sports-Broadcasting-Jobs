@@ -30,7 +30,7 @@
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      animation: netflixTransition 2.5s ease-in 3s forwards;
+      animation: netflixTransition 1.8s ease-out 2.8s forwards;
     }
 
     #splash-screen.hidden { display: none; }
@@ -53,9 +53,10 @@
     }
 
     .logo-svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+      width: 280px;
+      height: 280px;
+      object-fit: contain;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));
     }
 
     .logo-svg { animation: netflixScale 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s forwards; }
@@ -75,24 +76,9 @@
     }
 
     @keyframes netflixTransition {
-      0% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      75% {
-        opacity: 1;
-        transform: scale(1);
-      }
-      95% {
-        opacity: 0.1;
-        transform: scale(1.02);
-      }
-      100% {
-        opacity: 0;
-        transform: scale(1.05);
-        pointer-events: none;
-        visibility: hidden;
-      }
+      0%   { opacity: 1; }
+      60%  { opacity: 1; }
+      100% { opacity: 0; pointer-events: none; }
     }
 
     .splash-text {
@@ -622,47 +608,13 @@
 <!-- SPLASH SCREEN -->
 <div id="splash-screen">
   <div class="splash-container">
-    <svg class="logo-svg" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
-      <!-- White circle background -->
-      <circle cx="110" cy="150" r="125" fill="white" />
-
-      <!-- Black circle border - thick -->
-      <circle cx="110" cy="150" r="125" fill="none" stroke="#000000" stroke-width="8" />
-
-      <!-- Red background for B -->
-      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z"
-        fill="#b91c1c" />
-
-      <!-- White outer strokes for beveled 3D effect -->
-      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z"
-        fill="none" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" />
-
-      <!-- Red outline strokes for beveled effect -->
-      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z"
-        fill="none" stroke="#b91c1c" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
-
-      <!-- TV Text - Bold black, positioned to the right -->
-      <text x="185" y="185" font-family="Arial, sans-serif" font-size="100" font-weight="900" fill="#000000" letter-spacing="0" class="logo-tv-text">TV</text>
-    </svg>
+    <img class="logo-svg" src="logo.png" alt="BoonetTV Logo" />
   </div>
 </div>
 
 <header>
   <div class="logo">
-    <svg width="50" height="50" viewBox="0 0 320 300" xmlns="http://www.w3.org/2000/svg">
-      <!-- White circle background -->
-      <circle cx="110" cy="150" r="125" fill="white" />
-      <!-- Black circle border -->
-      <circle cx="110" cy="150" r="125" fill="none" stroke="#000000" stroke-width="8" />
-      <!-- Red background for B -->
-      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z" fill="#b91c1c" />
-      <!-- White outer strokes -->
-      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z" fill="none" stroke="white" stroke-width="8" stroke-linejoin="round" stroke-linecap="round" />
-      <!-- Red outline strokes -->
-      <path d="M 50 60 L 50 240 L 130 240 Q 155 240 155 215 L 155 195 Q 155 180 135 175 L 155 175 Q 175 170 175 150 L 175 85 Q 175 60 155 60 Z M 75 90 L 130 90 Q 150 90 150 105 L 150 165 L 75 165 Z M 75 190 L 150 190 Q 165 190 165 205 L 165 220 Q 165 235 130 235 L 75 235 Z" fill="none" stroke="#b91c1c" stroke-width="4" stroke-linejoin="round" stroke-linecap="round" />
-      <!-- TV Text -->
-      <text x="185" y="185" font-family="Arial, sans-serif" font-size="100" font-weight="900" fill="#000000" letter-spacing="0">TV</text>
-    </svg>
+    <img src="logo.png" alt="BoonetTV" style="width:52px;height:52px;border-radius:12px;object-fit:cover;" />
   </div>
   <h1>Sports Broadcasting</h1>
 </header>
@@ -793,10 +745,9 @@
   // Splash Screen - Netflix style
   window.addEventListener('load', () => {
     const splash = document.getElementById('splash-screen');
-    // Splash plays for 1.5s scale + 1.5s pause + 2.5s transition = ~5.5s total
-    setTimeout(() => {
+    splash.addEventListener('animationend', () => {
       splash.style.display = 'none';
-    }, 5500);
+    });
   });
 
   let jobs = [];
