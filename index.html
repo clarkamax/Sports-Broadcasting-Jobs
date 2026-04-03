@@ -24,7 +24,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: white;
+      background: #0a0e11;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -84,7 +84,7 @@
     /* Page content starts invisible and fades in as splash fades out */
     #page-content {
       opacity: 0;
-      animation: pageReveal 1.4s ease-out 3.6s forwards;
+      animation: pageReveal 1.4s ease-out 3.2s forwards;
     }
 
     @keyframes pageReveal {
@@ -759,9 +759,7 @@
   // Splash Screen - Netflix style
   window.addEventListener('load', () => {
     const splash = document.getElementById('splash-screen');
-    splash.addEventListener('animationend', () => {
-      splash.style.display = 'none';
-    });
+    setTimeout(() => { splash.style.display = 'none'; }, 4700);
   });
 
   let jobs = [];
