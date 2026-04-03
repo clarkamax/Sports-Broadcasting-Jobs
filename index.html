@@ -77,8 +77,19 @@
 
     @keyframes netflixTransition {
       0%   { opacity: 1; }
-      60%  { opacity: 1; }
+      55%  { opacity: 1; }
       100% { opacity: 0; pointer-events: none; }
+    }
+
+    /* Page content starts invisible and fades in as splash fades out */
+    #page-content {
+      opacity: 0;
+      animation: pageReveal 1.4s ease-out 3.6s forwards;
+    }
+
+    @keyframes pageReveal {
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
 
     .splash-text {
@@ -612,6 +623,7 @@
   </div>
 </div>
 
+<div id="page-content">
 <header>
   <div class="logo">
     <img src="logo.png" alt="BoonetTV" style="width:52px;height:52px;border-radius:12px;object-fit:cover;" />
@@ -713,6 +725,8 @@
     <tbody id="job-table-body"></tbody>
   </table>
 </div>
+
+</div><!-- end page-content -->
 
 <!-- Staff Modal -->
 <div class="modal-overlay" id="staff-modal">
